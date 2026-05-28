@@ -28,16 +28,43 @@ export function Comments() {
 
   const handlePhotoSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file && file.size <= 5 * 1024 * 1024) { // 5MB limit
-      setProfilePhoto(file);
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        setPreviewUrl(event.target?.result as string);
-      };
-      reader.readAsDataURL(file);
-    } else {
+    if (!file) return;
+
+    if (file.size > 5 * 1024 * 1024) { // 5MB limit
       alert('File size must be less than 5MB');
+      return;
     }
+
+    // Compress image before storing
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        let width = img.width;
+        let height = img.height;
+
+        // Reduce dimensions to max 400x400
+        if (width > 400 || height > 400) {
+          const ratio = Math.min(400 / width, 400 / height);
+          width = width * ratio;
+          height = height * ratio;
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx?.drawImage(img, 0, 0, width, height);
+
+        // Convert to base64 with compression
+        const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
+        setPreviewUrl(compressedBase64);
+        setProfilePhoto(file);
+        console.log('Photo compressed from', Math.round(file.size / 1024), 'KB');
+      };
+      img.src = event.target?.result as string;
+    };
+    reader.readAsDataURL(file);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
