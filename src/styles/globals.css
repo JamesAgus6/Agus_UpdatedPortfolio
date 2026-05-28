@@ -1,0 +1,149 @@
+/* Slick Carousel Custom Styles */
+.slick-dots {
+  bottom: 20px;
+}
+
+.slick-dots li button:before {
+  color: #F47C7C;
+  opacity: 0.3;
+}
+
+.slick-dots li.slick-active button:before {
+  color: #F47C7C;
+  opacity: 1;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Ambient gradient orbs */
+body::before {
+  content: '';
+  position: fixed;
+  top: 20%;
+  left: 10%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(244, 124, 124, 0.08) 0%, transparent 70%);
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: -1;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  bottom: 10%;
+  right: 15%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(252, 159, 91, 0.06) 0%, transparent 70%);
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Glassmorphism utilities */
+.glass {
+  backdrop-filter: blur(32px);
+  -webkit-backdrop-filter: blur(32px);
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.glass:hover {
+  box-shadow: 0 20px 40px rgba(244, 124, 124, 0.15);
+}
+
+.glass-heavy {
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+}
+
+.glass-border {
+  border: 1px solid;
+  border-image: linear-gradient(180deg, rgba(244, 124, 124, 0.4) 0%, rgba(255, 207, 225, 0.1) 100%) 1;
+}
+
+/* Interactive glass cards with magnetic effect */
+.glass-card {
+  backdrop-filter: blur(32px);
+  -webkit-backdrop-filter: blur(32px);
+  transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.glass-card:hover {
+  box-shadow: 0 20px 40px rgba(244, 124, 124, 0.1);
+  transform: translateY(-2px);
+}
+
+/* Particle animation */
+@keyframes float {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.3;
+  }
+  25% {
+    transform: translate(20px, -30px) scale(1.1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translate(-15px, -60px) scale(0.9);
+    opacity: 0.4;
+  }
+  75% {
+    transform: translate(-30px, -30px) scale(1.05);
+    opacity: 0.6;
+  }
+}
+
+/* Liquid fade and drift-up animation */
+@keyframes drift-up {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-drift-up {
+  animation: drift-up 0.6s ease-out;
+}
+
+/* Page transitions */
+@keyframes page-enter {
+  0% {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.page-transition {
+  animation: page-enter 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* Kinetic blur reveal animation */
+@keyframes kinetic-reveal {
+  0% {
+    opacity: 0;
+    filter: blur(20px);
+    transform: translateY(40px);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+  }
+}
+
+.kinetic-reveal {
+  animation: kinetic-reveal 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+}

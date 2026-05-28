@@ -1,0 +1,53 @@
+query GetMyPortfolioSections @auth(level: USER) {
+  portfolios(where: { userId: { eq_expr: "auth.uid" } }) {
+    id
+    title
+    sections(orderBy: [{ order: ASC }]) {
+      id
+      title
+      type
+      order
+      content
+    }
+  }
+}
+
+mutation CreateNewPortfolio($title: String!, $slug: String!, $isPublished: Boolean!, $theme: String, $description: String) @auth(level: USER) {
+  portfolio_insert(
+    data: {
+      userId_expr: "auth.uid"
+      title: $title
+      slug: $slug
+      isPublished: $isPublished
+      theme: $theme
+      description: $description
+      createdAt_expr: "request.time"
+      updatedAt_expr: "request.time"
+    }
+  ) {
+    id
+  }
+}
+
+mutation UpdateProjectDetails($projectId: UUID!, $title: String, $description: String, $imageUrl: String, $projectUrl: String, $githubRepoUrl: String, $technologiesUsed: [String!]) @auth(level: USER) {
+  project_update(
+    id: $projectId,
+    data: {
+      title: $title
+      description: $description
+      imageUrl: $imageUrl
+      projectUrl: $projectUrl
+      githubRepoUrl: $githubRepoUrl
+      technologiesUsed: $technologiesUsed
+      updatedAt_expr: "request.time"
+    }
+  ) {
+    id
+  }
+}
+
+mutation DeleteExperience($experienceId: UUID!) @auth(level: USER) {
+  experience_delete(id: $experienceId) {
+    id
+  }
+}
