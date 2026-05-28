@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Send, Upload } from 'lucide-react';
+import { toast } from 'sonner';
 import { Comment, addComment, subscribeToComments } from '../../services/commentService';
 
 export function Comments() {
@@ -31,7 +32,7 @@ export function Comments() {
     if (!file) return;
 
     if (file.size > 5 * 1024 * 1024) { // 5MB limit
-      alert('File size must be less than 5MB');
+      toast.error('File size must be less than 5MB');
       return;
     }
 
@@ -70,7 +71,7 @@ export function Comments() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name.trim() || !formData.message.trim()) {
-      alert('Please fill in all required fields');
+      toast.error('Please fill in all required fields');
       return;
     }
 
@@ -97,10 +98,21 @@ export function Comments() {
       setFormData({ name: '', message: '' });
       setProfilePhoto(null);
       setPreviewUrl('');
-      alert('Comment posted successfully!');
-    } catch (error) {
+      toast.success('Comment posted successfully! 🎉');
+    } catch (error: any) {
       console.error('Error submitting comment:', error);
-      alert('Error posting comment. Check console for details. Make sure Firestore is configured properly.');
+      const errorMessage = error?.message || 'Unknown error';
+      const errorCode = error?.code || 'UNKNOWN';
+      console.error('Firebase error code:', errorCode);
+      console.error('Firebase error message:', errorMessage);
+      
+      if (errorCode === 'permission-denied') {
+        toast.error('Permission denied. Please check Firestore rules are published.');
+      } else if (errorCode === 'unavailable') {
+        toast.error('Firebase service temporarily unavailable. Please try again.');
+      } else {
+        toast.error('Error posting comment. Check console for details.');
+      }
     } finally {
       setLoading(false);
     }

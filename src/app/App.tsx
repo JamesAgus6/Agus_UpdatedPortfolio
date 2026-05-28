@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router';
 import { useEffect } from 'react';
+import { Toaster } from 'sonner';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { FloatingControls } from './components/FloatingControls';
@@ -22,6 +23,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <ScrollToTop />
+      <Toaster position="top-right" richColors />
       <div className="min-h-screen flex flex-col">
         <Header />
         <FloatingControls />
