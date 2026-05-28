@@ -1,4 +1,4 @@
-import { Mail, MapPin, Phone, Linkedin, Instagram, Facebook, Github } from 'lucide-react';
+import { Send, Mail, MapPin, Phone, Linkedin, Instagram, Facebook, Github } from 'lucide-react';
 import { Comments } from '../components/Comments';
 
 export function Contact() {
