@@ -347,7 +347,7 @@ export function Home() {
             Featured Projects
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 stagger-container">
             {[
               { img: Project1Img, title: 'Profile Designing using Adobe Photoshop' },
               { img: Project2Img, title: 'Registration Form using C#' },

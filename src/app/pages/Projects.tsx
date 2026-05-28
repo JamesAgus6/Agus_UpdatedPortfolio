@@ -10,6 +10,8 @@ import Project8Img from '../../imports/Project8.jpg';
 import Project4Video from '../../imports/Project4.mp4';
 import ElectronHubImg from '../../imports/image.png';
 import CertificateImg from '../../imports/PSITE-MSW-Student-Congress-Cert-AGUS__JAMES_TAHUM-3.jpg';
+import Project10Img from '../../imports/Project10.png';
+import Project11Img from '../../imports/Project11.png';
 
 type TabType = 'projects' | 'certificates' | 'techstack';
 
@@ -88,6 +90,20 @@ export function Projects() {
       image: Project8Img,
       title: 'Product Designing',
       description: 'Conceptual product visualization and branding',
+      type: 'image'
+    },
+    {
+      id: 10,
+      image: Project10Img,
+      title: 'Barangay Mapulang Lupa - Official Website',
+      description: 'Full-stack web development for community service organization featuring facility calendars and administrative portal',
+      type: 'image'
+    },
+    {
+      id: 11,
+      image: Project11Img,
+      title: 'Evita Salon - Professional Services Website',
+      description: 'Modern booking system and gallery showcase for premium hair and nail salon with responsive design',
       type: 'image'
     },
   ];
@@ -170,7 +186,7 @@ export function Projects() {
         <div className="min-h-[600px]">
           {/* Projects Tab */}
           {activeTab === 'projects' && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-drift-up">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-drift-up stagger-container">
               {projects.map((project, index) => (
                 <div
                   key={project.id}

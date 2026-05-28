@@ -147,3 +147,126 @@ body::after {
 .kinetic-reveal {
   animation: kinetic-reveal 0.8s cubic-bezier(0.25, 1, 0.5, 1);
 }
+
+/* Scroll animations */
+@keyframes fade-in-up {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in-down {
+  0% {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in-left {
+  0% {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fade-in-right {
+  0% {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scale-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Scroll animation classes */
+.scroll-fade-in {
+  animation: fade-in-up 0.6s ease-out forwards;
+  opacity: 0;
+}
+
+.scroll-fade-in-down {
+  animation: fade-in-down 0.6s ease-out forwards;
+  opacity: 0;
+}
+
+.scroll-fade-in-left {
+  animation: fade-in-left 0.6s ease-out forwards;
+  opacity: 0;
+}
+
+.scroll-fade-in-right {
+  animation: fade-in-right 0.6s ease-out forwards;
+  opacity: 0;
+}
+
+.scroll-scale-in {
+  animation: scale-in 0.6s ease-out forwards;
+  opacity: 0;
+}
+
+/* Stagger animations for child elements */
+@keyframes stagger-up {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.stagger-container > * {
+  opacity: 0;
+  animation: stagger-up 0.6s ease-out forwards;
+}
+
+.stagger-container > *:nth-child(1) { animation-delay: 0.1s; }
+.stagger-container > *:nth-child(2) { animation-delay: 0.2s; }
+.stagger-container > *:nth-child(3) { animation-delay: 0.3s; }
+.stagger-container > *:nth-child(4) { animation-delay: 0.4s; }
+.stagger-container > *:nth-child(5) { animation-delay: 0.5s; }
+.stagger-container > *:nth-child(6) { animation-delay: 0.6s; }
+.stagger-container > *:nth-child(7) { animation-delay: 0.7s; }
+.stagger-container > *:nth-child(8) { animation-delay: 0.8s; }
+.stagger-container > *:nth-child(9) { animation-delay: 0.9s; }
+
+/* Smooth page transitions */
+@keyframes page-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.page-fade-in {
+  animation: page-fade-in 0.4s ease-out;
+}
