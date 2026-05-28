@@ -98,7 +98,7 @@ export function Comments() {
       setFormData({ name: '', message: '' });
       setProfilePhoto(null);
       setPreviewUrl('');
-      toast.success('Comment posted successfully! 🎉');
+      toast.success('Comment posted successfully!');
     } catch (error: any) {
       console.error('Error submitting comment:', error);
       const errorMessage = error?.message || 'Unknown error';
@@ -163,7 +163,7 @@ export function Comments() {
           {/* Profile Photo Upload */}
           <div>
             <label className="text-xs tracking-[0.15em] uppercase text-muted-foreground mb-3 block" style={{ fontFamily: 'var(--font-mono)' }}>
-              PROFILE PHOTO (OPTIONAL)
+              PROFILE PHOTO
             </label>
             <label className="flex flex-col items-center justify-center w-full px-4 py-8 border-2 border-dashed border-[rgba(244,124,124,0.3)] rounded-xl cursor-pointer hover:border-primary transition-colors bg-secondary/30">
               <div className="flex flex-col items-center justify-center py-4">
