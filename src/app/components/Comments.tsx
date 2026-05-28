@@ -14,11 +14,16 @@ export function Comments() {
 
   // Real-time listener for comments
   useEffect(() => {
+    console.log('Setting up comments listener...');
     const unsubscribe = subscribeToComments((updatedComments) => {
+      console.log('Comments updated:', updatedComments);
       setComments(updatedComments);
     });
 
-    return () => unsubscribe();
+    return () => {
+      console.log('Cleaning up comments listener');
+      unsubscribe();
+    };
   }, []);
 
   const handlePhotoSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,19 +56,24 @@ export function Comments() {
         photoData = previewUrl; // Already in base64 format
       }
 
-      await addComment({
+      console.log('Submitting comment...', { name: formData.name, hasPhoto: !!photoData });
+
+      const commentId = await addComment({
         name: formData.name.trim(),
-        email: `user_${Date.now()}@portfolio.local`, // Generate temporary email
+        email: `user_${Date.now()}@portfolio.local`,
         message: formData.message.trim(),
         profilePhoto: photoData,
       });
 
+      console.log('Comment added with ID:', commentId);
+      
       setFormData({ name: '', message: '' });
       setProfilePhoto(null);
       setPreviewUrl('');
+      alert('Comment posted successfully!');
     } catch (error) {
       console.error('Error submitting comment:', error);
-      alert('Error posting comment. Please try again.');
+      alert('Error posting comment. Check console for details. Make sure Firestore is configured properly.');
     } finally {
       setLoading(false);
     }

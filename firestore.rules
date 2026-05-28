@@ -3,14 +3,17 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     // Allow reading comments by everyone
-    match /comments/{document=**} {
+    match /comments/{docId} {
       allow read: if true;
-      // Allow writing (creating) comments by everyone
-      // In production, you may want to add rate limiting or authentication checks
-      allow create: if request.resource.data.name != null && request.resource.data.message != null;
-      // Allow updates only for admin/owner
+      // Allow creating comments by everyone - validate required fields
+      allow create: if 
+        request.resource.data.name != null && 
+        request.resource.data.name != '' &&
+        request.resource.data.message != null && 
+        request.resource.data.message != '' &&
+        request.resource.data.timestamp != null;
+      // Prevent updates and deletes
       allow update: if false;
-      // Allow deletes only for admin
       allow delete: if false;
     }
     
