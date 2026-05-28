@@ -191,6 +191,35 @@ export function Comments() {
 
       {/* Comments Display Section */}
       <div className="space-y-4">
+        {/* Pinned Admin Comment */}
+        <div className="glass border border-solid border-primary/50 rounded-2xl p-6 bg-primary/5 shadow-lg shadow-primary/10">
+          <div className="flex gap-4">
+            {/* Profile Avatar */}
+            <div className="flex-shrink-0">
+              <div className="w-12 h-12 rounded-full bg-primary/30 flex items-center justify-center border border-primary/50">
+                <span className="text-sm font-bold text-primary">J</span>
+              </div>
+            </div>
+
+            {/* Comment Content */}
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 mb-2">
+                <p className="font-semibold text-foreground">James</p>
+                <span className="px-2 py-1 text-xs font-medium bg-primary/20 text-primary rounded-full border border-primary/30">
+                  Admin
+                </span>
+                <span className="px-2 py-1 text-xs font-medium bg-primary/20 text-primary rounded-full border border-primary/30">
+                  Pinned
+                </span>
+              </div>
+              <p className="text-sm text-muted-foreground mb-3 leading-relaxed">
+                Welcome to my portfolio! I'm excited to hear your thoughts and feedback. Feel free to leave a comment below and don't hesitate to reach me out at my Instagram @jade.vlmdrd if you have any questions about my projects or services.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* User Comments */}
         {comments.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-muted-foreground">No comments yet. Be the first to share your thoughts!</p>
