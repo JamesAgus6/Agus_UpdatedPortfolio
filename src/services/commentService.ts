@@ -15,6 +15,7 @@ export interface Comment {
   name: string;
   email: string;
   message: string;
+  profilePhoto?: string; // Base64 encoded image
   timestamp: Timestamp;
   projectId?: string;
   read?: boolean;
