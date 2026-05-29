@@ -3,8 +3,8 @@ import { Send, Upload } from 'lucide-react';
 import { toast } from 'sonner';
 import { Comment, addComment, subscribeToComments } from '../../services/commentService';
 
-export function Comments() {
-  const [comments, setComments] = useState<Comment[]>([]);
+// Compact Comment Form Component
+export function CommentForm() {
   const [loading, setLoading] = useState(false);
   const [profilePhoto, setProfilePhoto] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string>('');
@@ -12,20 +12,6 @@ export function Comments() {
     name: '',
     message: '',
   });
-
-  // Real-time listener for comments
-  useEffect(() => {
-    console.log('Setting up comments listener...');
-    const unsubscribe = subscribeToComments((updatedComments) => {
-      console.log('Comments updated:', updatedComments);
-      setComments(updatedComments);
-    });
-
-    return () => {
-      console.log('Cleaning up comments listener');
-      unsubscribe();
-    };
-  }, []);
 
   const handlePhotoSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -118,181 +104,200 @@ export function Comments() {
     }
   };
 
+  return (
+    <form onSubmit={handleSubmit} className="space-y-3">
+          {/* Name Field */}
+      <div>
+        <label className="text-xs tracking-[0.15em] uppercase text-primary mb-2 block" style={{ fontFamily: 'var(--font-mono)' }}>
+          NAME <span className="text-primary">*</span>
+        </label>
+        <input
+          type="text"
+          placeholder="Your name"
+          value={formData.name}
+          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+          required
+          className="w-full px-3 py-2 glass border border-solid border-[rgba(244,124,124,0.3)] rounded-lg bg-secondary/30 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-all"
+        />
+      </div>
+
+      {/* Message Field */}
+      <div>
+        <label className="text-xs tracking-[0.15em] uppercase text-primary mb-2 block" style={{ fontFamily: 'var(--font-mono)' }}>
+          MESSAGE <span className="text-primary">*</span>
+        </label>
+        <textarea
+          placeholder="Your message..."
+          value={formData.message}
+          onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+          required
+          rows={3}
+          className="w-full px-3 py-2 glass border border-solid border-[rgba(244,124,124,0.3)] rounded-lg bg-secondary/30 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-all resize-none"
+        />
+      </div>
+
+      {/* Profile Photo Upload */}
+      <div>
+        <label className="text-xs tracking-[0.15em] uppercase text-muted-foreground mb-2 block" style={{ fontFamily: 'var(--font-mono)' }}>
+          PHOTO (OPTIONAL)
+        </label>
+        <label className="flex flex-col items-center justify-center w-full px-3 py-3 border-2 border-dashed border-[rgba(244,124,124,0.3)] rounded-lg cursor-pointer hover:border-primary transition-colors bg-secondary/30">
+          <Upload size={18} className="text-primary mb-1" />
+          <p className="text-xs font-medium text-foreground">Choose Photo</p>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handlePhotoSelect}
+            className="hidden"
+          />
+        </label>
+        {previewUrl && (
+          <div className="mt-2">
+            <img
+              src={previewUrl}
+              alt="Preview"
+              className="w-10 h-10 rounded-full object-cover border border-primary"
+            />
+          </div>
+        )}
+      </div>
+
+      {/* Submit Button */}
+      <button
+        type="submit"
+        disabled={loading}
+        className="w-full px-3 py-2 bg-primary text-primary-foreground text-xs font-medium hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all rounded-lg flex items-center justify-center gap-2 shadow-lg shadow-primary/30"
+      >
+        <Send size={14} />
+        <span>{loading ? 'POSTING...' : 'POST'}</span>
+      </button>
+    </form>
+  );
+}
+
+// Comments Feed Component
+export function CommentsFeed() {
+  const [comments, setComments] = useState<Comment[]>([]);
+
+  useEffect(() => {
+    console.log('Setting up comments listener...');
+    const unsubscribe = subscribeToComments((updatedComments) => {
+      console.log('Comments updated:', updatedComments);
+      setComments(updatedComments);
+    });
+
+    return () => {
+      console.log('Cleaning up comments listener');
+      unsubscribe();
+    };
+  }, []);
+
   const adminUsers = ['James', 'james'];
 
   return (
+    <div className="space-y-2 max-h-[380px] overflow-y-auto scrollbar-thin scrollbar-thumb-primary/20 scrollbar-track-transparent pr-2">
+      {/* Pinned Admin Comment */}
+      <div className="glass border border-solid border-primary/50 rounded-2xl p-4 bg-primary/5 shadow-lg shadow-primary/10 flex-shrink-0">
+        <div className="flex gap-3">
+          {/* Profile Avatar */}
+          <div className="flex-shrink-0">
+            <div className="w-10 h-10 rounded-full bg-primary/30 flex items-center justify-center border border-primary/50 min-w-[40px]">
+              <span className="text-xs font-bold text-primary">J</span>
+            </div>
+          </div>
+
+          {/* Comment Content */}
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 mb-1 flex-wrap">
+              <p className="font-semibold text-sm text-foreground">James</p>
+              <span className="px-2 py-0.5 text-xs font-medium bg-primary/20 text-primary rounded-full border border-primary/30 whitespace-nowrap">
+                Admin
+              </span>
+              <span className="px-2 py-0.5 text-xs font-medium bg-primary/20 text-primary rounded-full border border-primary/30 whitespace-nowrap">
+                Pinned
+              </span>
+            </div>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              Welcome! Leave a comment below. Feel free to reach out on Instagram @jade.vlmdrd for any questions!
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* User Comments */}
+      {comments.length === 0 ? (
+        <div className="text-center py-6">
+          <p className="text-xs text-muted-foreground">No comments yet. Be first to share!</p>
+        </div>
+      ) : (
+        comments.map((comment) => {
+          const isAdmin = adminUsers.includes(comment.name);
+          return (
+            <div
+              key={comment.id}
+              className="glass border border-solid border-[rgba(244,124,124,0.3)] rounded-lg p-3 hover:border-primary/50 transition-all flex-shrink-0"
+            >
+              <div className="flex gap-3">
+                {/* Profile Photo or Avatar */}
+                <div className="flex-shrink-0">
+                  {comment.profilePhoto ? (
+                    <img
+                      src={comment.profilePhoto}
+                      alt={comment.name}
+                      className="w-10 h-10 rounded-full object-cover border border-primary/30 min-w-[40px]"
+                    />
+                  ) : (
+                    <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center border border-primary/30 min-w-[40px]">
+                      <span className="text-xs font-bold text-primary">
+                        {comment.name.charAt(0).toUpperCase()}
+                      </span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Comment Content */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-1">
+                    <p className="font-semibold text-sm text-foreground truncate">{comment.name}</p>
+                    {isAdmin && (
+                      <span className="px-2 py-0.5 text-xs font-medium bg-primary/20 text-primary rounded-full border border-primary/30 whitespace-nowrap">
+                        Admin
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-xs text-muted-foreground mb-2 leading-relaxed line-clamp-3">
+                    {comment.message}
+                  </p>
+                  <p className="text-xs text-muted-foreground/70">
+                    {comment.timestamp && new Date(comment.timestamp.seconds * 1000).toLocaleDateString('en-US', {
+                      month: 'short',
+                      day: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit'
+                    })}
+                  </p>
+                </div>
+              </div>
+            </div>
+          );
+        })
+      )}
+    </div>
+  );
+}
+
+// Legacy full component export for backward compatibility
+export function Comments() {
+  return (
     <div className="space-y-8">
-      {/* Form Section */}
       <div className="glass border border-solid border-[rgba(244,124,124,0.3)] rounded-3xl p-8">
         <h3 className="flex items-center gap-3 text-2xl mb-6" style={{ fontFamily: 'var(--font-display)', fontWeight: 700 }}>
           <span className="text-primary">💬</span>
-          Comments ({comments.length})
+          Comments
         </h3>
-
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Name Field */}
-          <div>
-            <label className="text-xs tracking-[0.15em] uppercase text-primary mb-3 block" style={{ fontFamily: 'var(--font-mono)' }}>
-              NAME <span className="text-primary">*</span>
-            </label>
-            <input
-              type="text"
-              placeholder="Enter your name"
-              value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              required
-              className="w-full px-4 py-3 glass border border-solid border-[rgba(244,124,124,0.3)] rounded-xl bg-secondary/30 text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-all"
-            />
-          </div>
-
-          {/* Message Field */}
-          <div>
-            <label className="text-xs tracking-[0.15em] uppercase text-primary mb-3 block" style={{ fontFamily: 'var(--font-mono)' }}>
-              MESSAGE <span className="text-primary">*</span>
-            </label>
-            <textarea
-              placeholder="Write your message here..."
-              value={formData.message}
-              onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-              required
-              rows={5}
-              className="w-full px-4 py-3 glass border border-solid border-[rgba(244,124,124,0.3)] rounded-xl bg-secondary/30 text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-all resize-none"
-            />
-          </div>
-
-          {/* Profile Photo Upload */}
-          <div>
-            <label className="text-xs tracking-[0.15em] uppercase text-muted-foreground mb-3 block" style={{ fontFamily: 'var(--font-mono)' }}>
-              PROFILE PHOTO
-            </label>
-            <label className="flex flex-col items-center justify-center w-full px-4 py-8 border-2 border-dashed border-[rgba(244,124,124,0.3)] rounded-xl cursor-pointer hover:border-primary transition-colors bg-secondary/30">
-              <div className="flex flex-col items-center justify-center py-4">
-                <Upload size={32} className="text-primary mb-2" />
-                <p className="text-sm font-medium text-foreground">Choose Profile Photo</p>
-                <p className="text-xs text-muted-foreground">Max file size: 5MB</p>
-              </div>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handlePhotoSelect}
-                className="hidden"
-              />
-            </label>
-            {previewUrl && (
-              <div className="mt-3 relative">
-                <img
-                  src={previewUrl}
-                  alt="Preview"
-                  className="w-20 h-20 rounded-full object-cover border border-primary"
-                />
-              </div>
-            )}
-          </div>
-
-          {/* Submit Button */}
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full px-6 py-4 bg-primary text-primary-foreground font-medium hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all rounded-2xl flex items-center justify-center gap-2 shadow-lg shadow-primary/30"
-          >
-            <Send size={18} />
-            <span>{loading ? 'POSTING...' : 'POST COMMENT'}</span>
-          </button>
-        </form>
+        <CommentForm />
       </div>
-
-      {/* Comments Display Section */}
-      <div className="space-y-4">
-        {/* Pinned Admin Comment */}
-        <div className="glass border border-solid border-primary/50 rounded-2xl p-6 bg-primary/5 shadow-lg shadow-primary/10">
-          <div className="flex gap-4">
-            {/* Profile Avatar */}
-            <div className="flex-shrink-0">
-              <div className="w-12 h-12 rounded-full bg-primary/30 flex items-center justify-center border border-primary/50">
-                <span className="text-sm font-bold text-primary">J</span>
-              </div>
-            </div>
-
-            {/* Comment Content */}
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2 mb-2">
-                <p className="font-semibold text-foreground">James</p>
-                <span className="px-2 py-1 text-xs font-medium bg-primary/20 text-primary rounded-full border border-primary/30">
-                  Admin
-                </span>
-                <span className="px-2 py-1 text-xs font-medium bg-primary/20 text-primary rounded-full border border-primary/30">
-                  Pinned
-                </span>
-              </div>
-              <p className="text-sm text-muted-foreground mb-3 leading-relaxed">
-                Welcome to my portfolio! I'm excited to hear your thoughts and feedback. Feel free to leave a comment below and don't hesitate to reach me out at my Instagram @jade.vlmdrd if you have any questions about my projects or services.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* User Comments */}
-        {comments.length === 0 ? (
-          <div className="text-center py-12">
-            <p className="text-muted-foreground">No comments yet. Be the first to share your thoughts!</p>
-          </div>
-        ) : (
-          comments.map((comment) => {
-            const isAdmin = adminUsers.includes(comment.name);
-            return (
-              <div
-                key={comment.id}
-                className="glass border border-solid border-[rgba(244,124,124,0.3)] rounded-2xl p-6 hover:border-primary/50 transition-all"
-              >
-                <div className="flex gap-4">
-                  {/* Profile Photo or Avatar */}
-                  <div className="flex-shrink-0">
-                    {comment.profilePhoto ? (
-                      <img
-                        src={comment.profilePhoto}
-                        alt={comment.name}
-                        className="w-12 h-12 rounded-full object-cover border border-primary/30"
-                      />
-                    ) : (
-                      <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center border border-primary/30">
-                        <span className="text-sm font-bold text-primary">
-                          {comment.name.charAt(0).toUpperCase()}
-                        </span>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Comment Content */}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-2">
-                      <p className="font-semibold text-foreground">{comment.name}</p>
-                      {isAdmin && (
-                        <span className="px-2 py-1 text-xs font-medium bg-primary/20 text-primary rounded-full border border-primary/30">
-                          Admin
-                        </span>
-                      )}
-                    </div>
-                    <p className="text-sm text-muted-foreground mb-3 leading-relaxed">
-                      {comment.message}
-                    </p>
-                    <div className="flex items-center justify-between">
-                      <p className="text-xs text-muted-foreground/70">
-                        {comment.timestamp && new Date(comment.timestamp.seconds * 1000).toLocaleDateString('en-US', {
-                          month: 'short',
-                          day: 'numeric',
-                          year: 'numeric',
-                          hour: '2-digit',
-                          minute: '2-digit'
-                        })}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            );
-          })
-        )}
-      </div>
+      <CommentsFeed />
     </div>
   );
 }
