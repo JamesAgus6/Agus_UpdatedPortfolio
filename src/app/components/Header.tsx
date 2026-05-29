@@ -51,16 +51,24 @@ export function Header() {
         </div>
       </div>
 
+      {/* Mobile Backdrop Overlay */}
+      {isMenuOpen && (
+        <div 
+          className="fixed inset-0 md:hidden backdrop-blur-md bg-black/40 z-40"
+          onClick={() => setIsMenuOpen(false)}
+        />
+      )}
+
       {/* Mobile Navigation */}
       {isMenuOpen && (
-        <div className="md:hidden mt-4 glass rounded-3xl border border-solid border-[rgba(244,124,124,0.3)] shadow-lg">
+        <div className="md:hidden mt-4 fixed left-4 right-4 rounded-3xl z-50 bg-secondary/95 backdrop-blur-xl border border-solid border-primary/50 shadow-2xl shadow-primary/30">
           <nav className="flex flex-col p-6 gap-4">
             {navItems.map((item) => (
               <Link
                 key={item.path}
                 to={item.path}
                 onClick={() => setIsMenuOpen(false)}
-                className={`text-[11px] tracking-[0.15em] uppercase ${
+                className={`text-sm tracking-[0.15em] uppercase font-semibold ${
                   isActive(item.path) ? 'text-primary' : 'text-foreground'
                 } hover:text-primary transition-colors`}
                 style={{ fontFamily: 'var(--font-mono)' }}

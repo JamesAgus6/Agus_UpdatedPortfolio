@@ -1,7 +1,16 @@
 import { useState, useEffect } from 'react';
-import { Send, Upload } from 'lucide-react';
+import { Send, Upload, X } from 'lucide-react';
 import { toast } from 'sonner';
 import { Comment, addComment, subscribeToComments } from '../../services/commentService';
+
+// Utility function to get initials from name
+const getInitials = (name: string): string => {
+  const trimmedName = name.trim();
+  if (!trimmedName) return '?';
+  const parts = trimmedName.split(' ');
+  // Get first letter of first name only
+  return parts[0].charAt(0).toUpperCase();
+};
 
 // Compact Comment Form Component
 export function CommentForm() {
@@ -56,17 +65,23 @@ export function CommentForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.name.trim() || !formData.message.trim()) {
-      toast.error('Please fill in all required fields');
+    
+    // Validate only required fields (name and message) - photo is OPTIONAL
+    if (!formData.name.trim()) {
+      toast.error('Please enter your name');
+      return;
+    }
+    if (!formData.message.trim()) {
+      toast.error('Please enter a message');
       return;
     }
 
     setLoading(true);
 
     try {
-      // Convert profile photo to base64 if it exists
+      // Convert profile photo to base64 if it exists (OPTIONAL)
       let photoData: string | undefined = undefined;
-      if (profilePhoto) {
+      if (profilePhoto && previewUrl) {
         photoData = previewUrl; // Already in base64 format
       }
 
@@ -76,7 +91,7 @@ export function CommentForm() {
         name: formData.name.trim(),
         email: `user_${Date.now()}@portfolio.local`,
         message: formData.message.trim(),
-        profilePhoto: photoData,
+        profilePhoto: photoData, // undefined if no photo selected
       });
 
       console.log('Comment added with ID:', commentId);
@@ -136,29 +151,44 @@ export function CommentForm() {
         />
       </div>
 
-      {/* Profile Photo Upload */}
+      {/* Profile Photo Upload - OPTIONAL */}
       <div>
         <label className="text-xs tracking-[0.15em] uppercase text-muted-foreground mb-2 block" style={{ fontFamily: 'var(--font-mono)' }}>
-          PHOTO (OPTIONAL)
+          PHOTO <span className="text-muted-foreground/70">(optional)</span>
         </label>
-        <label className="flex flex-col items-center justify-center w-full px-3 py-3 border-2 border-dashed border-[rgba(244,124,124,0.3)] rounded-lg cursor-pointer hover:border-primary transition-colors bg-secondary/30">
-          <Upload size={18} className="text-primary mb-1" />
-          <p className="text-xs font-medium text-foreground">Choose Photo</p>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handlePhotoSelect}
-            className="hidden"
-          />
-        </label>
-        {previewUrl && (
-          <div className="mt-2">
-            <img
-              src={previewUrl}
-              alt="Preview"
-              className="w-10 h-10 rounded-full object-cover border border-primary"
-            />
+        {previewUrl ? (
+          <div className="flex items-center gap-2">
+            <div className="relative">
+              <img
+                src={previewUrl}
+                alt="Preview"
+                className="w-10 h-10 rounded-full object-cover border border-primary"
+              />
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                setProfilePhoto(null);
+                setPreviewUrl('');
+                toast.success('Photo removed');
+              }}
+              className="px-3 py-1 text-xs bg-secondary border border-[rgba(244,124,124,0.3)] rounded-lg hover:border-primary transition-all flex items-center gap-1"
+            >
+              <X size={12} />
+              Remove
+            </button>
           </div>
+        ) : (
+          <label className="flex flex-col items-center justify-center w-full px-3 py-3 border-2 border-dashed border-[rgba(244,124,124,0.3)] rounded-lg cursor-pointer hover:border-primary transition-colors bg-secondary/30">
+            <Upload size={18} className="text-primary mb-1" />
+            <p className="text-xs font-medium text-foreground">Choose Photo</p>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handlePhotoSelect}
+              className="hidden"
+            />
+          </label>
         )}
       </div>
 
@@ -249,7 +279,7 @@ export function CommentsFeed() {
                   ) : (
                     <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center border border-primary/30 min-w-[40px]">
                       <span className="text-xs font-bold text-primary">
-                        {comment.name.charAt(0).toUpperCase()}
+                        {getInitials(comment.name)}
                       </span>
                     </div>
                   )}
