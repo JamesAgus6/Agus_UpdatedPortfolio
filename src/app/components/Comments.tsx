@@ -154,7 +154,7 @@ export function CommentForm() {
       {/* Profile Photo Upload - OPTIONAL */}
       <div>
         <label className="text-xs tracking-[0.15em] uppercase text-muted-foreground mb-2 block" style={{ fontFamily: 'var(--font-mono)' }}>
-          PHOTO <span className="text-muted-foreground/70">(optional)</span>
+          PHOTO
         </label>
         {previewUrl ? (
           <div className="flex items-center gap-2">
