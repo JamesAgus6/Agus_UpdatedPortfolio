@@ -1,18 +1,20 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router';
 import { Menu, X } from 'lucide-react';
+import { useScrollTracker } from '../../hooks/useScrollTracker';
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
 
   const navItems = [
-    { label: 'HOME', path: '/' },
-    { label: 'ABOUT', path: '/about' },
-    { label: 'PROJECTS', path: '/projects' },
-    { label: 'CONTACT', path: '/contact' },
+    { label: 'HOME', path: '/', id: 'home' },
+    { label: 'ABOUT', path: '/about', id: 'about' },
+    { label: 'PROJECTS', path: '/projects', id: 'portfolio' },
+    { label: 'CONTACT', path: '/contact', id: 'contact' },
   ];
 
+  const activeSection = useScrollTracker(navItems);
   const isActive = (path: string) => location.pathname === path;
 
   return (
@@ -34,8 +36,8 @@ export function Header() {
                 style={{ fontFamily: 'var(--font-mono)' }}
               >
                 {item.label}
-                {isActive(item.path) && (
-                  <span className="absolute -bottom-1 left-0 right-0 h-[2px] bg-primary rounded-full" />
+                {(isActive(item.path) || activeSection === item.id) && (
+                  <span className="nav-underline-active absolute -bottom-1 left-0 right-0 h-[2px] bg-primary rounded-full" />
                 )}
               </Link>
             ))}
@@ -69,7 +71,7 @@ export function Header() {
                 to={item.path}
                 onClick={() => setIsMenuOpen(false)}
                 className={`text-sm tracking-[0.15em] uppercase font-semibold ${
-                  isActive(item.path) ? 'text-primary' : 'text-foreground'
+                  isActive(item.path) || activeSection === item.id ? 'text-primary' : 'text-foreground'
                 } hover:text-primary transition-colors`}
                 style={{ fontFamily: 'var(--font-mono)' }}
               >

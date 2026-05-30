@@ -270,3 +270,184 @@ body::after {
 .page-fade-in {
   animation: page-fade-in 0.4s ease-out;
 }
+
+/* ===== SCROLL SNAP ARCHITECTURE ===== */
+.scroll-container {
+  scroll-behavior: smooth;
+  scroll-snap-type: y mandatory;
+  overflow-y: scroll;
+  height: 100vh;
+}
+
+.scroll-section {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* ===== HERO SPLIT-GRID ANIMATIONS ===== */
+@keyframes hero-slide-in-left {
+  0% {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes hero-slide-in-right {
+  0% {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.hero-content-left {
+  animation: hero-slide-in-left 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
+}
+
+.hero-content-right {
+  animation: hero-slide-in-right 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
+}
+
+.hero-subtitle-chip {
+  animation: hero-slide-in-left 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
+}
+
+.hero-subtitle-chip:nth-child(2) { animation-delay: 0.1s; }
+.hero-subtitle-chip:nth-child(3) { animation-delay: 0.2s; }
+.hero-subtitle-chip:nth-child(4) { animation-delay: 0.3s; }
+
+/* ===== SECTION TRANSITION CROSS-FADE ===== */
+@keyframes section-fade-out-up {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-60px);
+  }
+}
+
+@keyframes section-fade-in-up {
+  0% {
+    opacity: 0;
+    transform: translateY(60px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.section-exit {
+  animation: section-fade-out-up 0.6s ease-out forwards;
+}
+
+.section-enter {
+  animation: section-fade-in-up 0.6s ease-out forwards;
+}
+
+/* ===== TAB INDICATOR SLIDER ===== */
+@keyframes slider-move {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(var(--slider-offset, 0));
+  }
+}
+
+.tab-slider {
+  position: absolute;
+  bottom: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--primary, #F47C7C), var(--primary-light, #FC9F5B));
+  animation: slider-move 0.35s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+/* ===== CARD GRID CROSSFADE ===== */
+@keyframes card-fade-out-drop {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+}
+
+@keyframes card-fade-in-up {
+  0% {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card-exit {
+  animation: card-fade-out-drop 0.35s ease-out forwards;
+}
+
+.card-enter {
+  animation: card-fade-in-up 0.35s ease-out forwards;
+}
+
+/* ===== HOVER STATE EFFECTS ===== */
+.hover-lift {
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.hover-lift:hover {
+  transform: scale(1.03);
+  box-shadow: 0 20px 40px rgba(244, 124, 124, 0.2);
+  border-color: rgba(244, 124, 124, 0.6);
+}
+
+/* ===== COUNTER ANIMATIONS ===== */
+@keyframes counter-glow {
+  0%, 100% {
+    text-shadow: 0 0 10px rgba(244, 124, 124, 0);
+  }
+  50% {
+    text-shadow: 0 0 20px rgba(244, 124, 124, 0.4);
+  }
+}
+
+.counter-animate {
+  animation: counter-glow 0.6s ease-out;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ===== NAVIGATION SLIDE UNDERLINE ===== */
+@keyframes nav-underline-slide {
+  0% {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
+.nav-underline-active {
+  animation: nav-underline-slide 0.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  opacity: 0;
+  transform-origin: left;
+}
