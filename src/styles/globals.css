@@ -451,3 +451,85 @@ body::after {
   opacity: 0;
   transform-origin: left;
 }
+
+/* ===== TECH STACK GRID CARDS ===== */
+@keyframes tech-card-reveal {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.tech-card {
+  /* Glass morphism base */
+  background: rgba(17, 17, 21, 0.65);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+
+  /* Animation */
+  animation: tech-card-reveal 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
+
+  /* Smooth transitions */
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+
+  /* Prevent layout shift */
+  min-height: 140px;
+}
+
+/* Mobile responsive sizing */
+@media (max-width: 768px) {
+  .tech-card {
+    padding: 1rem;
+    min-height: 120px;
+  }
+}
+
+@media (max-width: 640px) {
+  .tech-card {
+    padding: 0.75rem;
+    min-height: 100px;
+  }
+}
+
+/* Tech card hover glow effect */
+.tech-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.3s ease-out;
+  pointer-events: none;
+}
+
+.tech-card:hover::before {
+  opacity: 1;
+}
+
+/* Text styling inside tech card */
+.tech-card p {
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  transition: color 0.3s ease-out;
+}
